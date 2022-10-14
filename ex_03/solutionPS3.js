@@ -20,10 +20,10 @@ const authenticate = (req, res, next) => {
     if (path[1] == "secret-token") {
       req.user = "admin"; 
       next();
+      return
     }
-  } else {
-    res.sendStatus(401);
   }
+  res.sendStatus(401);
 };
 // store contacts in an arrays
 // role is a property of each contact that is either "reader" or "editor"
@@ -76,7 +76,6 @@ app.get("/login", (req, res) => {
 function checkUser(name, password) {
   for (let i = 0; i < contacts.length; i++) {
     if (contacts[i].name == name && contacts[i].password == password) {
-      console.log(password);
       return contacts[i];
     }
   }
@@ -90,7 +89,6 @@ app.post("/auth", (req, res) => {
   // PS3 - This is where you need to make chnages
   // 1) Check that the name and password match a contact
   let user = checkUser(name, password);
-  console.log(user);
   if (user == null) {
     let form = `<p>User Or Password is not correct!</p>
     <form action="/auth" method="post">
